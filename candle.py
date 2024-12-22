@@ -1,14 +1,21 @@
+import sys
 import math
 from reportlab.lib.pagesizes import A4, landscape
 from reportlab.lib.units import mm
 from reportlab.pdfgen import canvas
 
+if len(sys.argv) != 4:
+  print("Usage: python3 candle.py R R_0 T")
+  print("------------------------------")
+  print("       R - candle radius in mm")
+  print("       R_0 - wick diameter in mm")
+  print("       T - wax sheet thickness in mm")
+  exit(0)
 
 # Input Parameters
-R = 25               # candle radius in mm
-R_0 = 2              # burning rod diameter in mm
-T = 2.5              # wax sheet thicknes in mm
-Z_step = 1           # height output step in mm
+R = float(sys.argv[1])               # candle radius in mm
+R_0 = float(sys.argv[2])             # burning rod diameter in mm
+T = float(sys.argv[3])               # wax sheet thicknes in mm
 
 # Do not change anything below this text unless you want to :-)
 
@@ -31,24 +38,20 @@ def get_z(phi):
 
 result = [] 
 
-phi = 0
-dphi = 0.1*math.pi/180
+Z_step = 1              # height output step in mm
+phi = 0                 # phase angle initial condition
+dphi = 0.1*math.pi/180  # phase angle stepsize
 
 next_z = R 
 
-print("l,z,r")
 while ((R**2-get_r(phi)**2) >= 0):
   l = get_l(phi)
   z = get_z(phi)
   if (z < next_z):
-    print(math.floor(l), ',', z, ',', get_r(phi))
-    if (phi > dphi):
-      print((get_z(phi) - get_z(phi - dphi))/(get_l(phi) - get_l(phi - dphi)))
     result.append([math.floor(l), z])
     next_z -= Z_step
   phi += dphi
 
-print(get_l(phi - dphi), ',', get_z(phi - dphi), ',', get_r(phi - dphi))
 result.append([get_l(phi - dphi), get_z(phi - dphi)])
 
 width, height = A4
@@ -56,7 +59,7 @@ margin = 15 * mm
 vsep = 5 * mm
 rel_x = margin
 rel_y = margin + R * mm
-pdf = canvas.Canvas("candle.pdf", pagesize=landscape(A4))
+pdf = canvas.Canvas("template.pdf", pagesize=landscape(A4))
 pdf.setLineWidth = 2
 pdf.setStrokeColorRGB(0, 0, 0)
 
@@ -91,3 +94,5 @@ for i in result:
 pdf.drawPath(path_up)
 pdf.drawPath(path_down)
 pdf.save()
+
+print("Candle template saved in template.pdf")

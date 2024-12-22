@@ -1,0 +1,52 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+
+%opening
+\title{Template for Rolled Spherical Candles}
+\author{Roman Firt}
+
+\begin{document}
+
+\maketitle
+
+We construct a parametric function for the candle middle surface as a function $m$ of angular coordinate $\phi$ defined as:
+$$m(\phi)=(r(\phi), z(\phi)),$$
+where $r$ and $z$ is the evolving radius and height of the wax sheet. The top and side view are illustrated in Figures \ref{topview} and \ref{sideview}. The individual components of $m$ are defined as:
+\begin{eqnarray}
+z(\phi)&=&\sqrt{R^2-r^2(\phi)}\\
+r(\phi)&=&R_0+\frac{T}{2}+\frac{\phi}{2\pi}T,
+\end{eqnarray}
+where $R$, $R_0$ and $T$ are the desired candle radius, the wick radius and $T$ the wax sheet layer thickness respectively.
+
+The main objective is to get the length of the mid surface $l$ as a function of $\phi$, so that it plotted as a cut template as illustrated in Figure \ref{cuttemplate}. Using the arc length formula in polar coordinates we get:
+\begin{eqnarray}
+l(\phi)&=&\int_0^{\phi}\sqrt{\left(\frac{\mathrm{d}r}{\mathrm{d}\theta}\right)^2+r^2(\theta)}\mathrm{d}\theta\\
+&=&\int_0^{\phi}\sqrt{\frac{T^2}{4\pi^2}+\left(R_0+\frac{T}{2}+\frac{\theta}{2\pi}\right)^2T^2}\mathrm{d}\theta\\
+&=&\frac{T}{2\pi}\int_{\frac{2\pi}{T}R_0+\pi}^{\frac{2\pi}{T}R_0+\pi+\phi}\sqrt{\psi^2+1}\mathrm{d}\psi\\
+&=&\left[\frac{1}{2}\psi\sqrt{1+\psi^2}+\frac{1}{2}\log\left(\psi+\sqrt{1+\psi^2}\right)\right]_{\frac{2\pi}{T}R_0+\pi}^{\frac{2\pi}{T}R_0+\pi+\phi}
+\end{eqnarray}
+
+Now the curves $\left(l(\phi), z(\phi)\right)$ and $\left(l(\phi), -z(\phi)\right)$ define the shape to be cut. For a particulat set of input parameters $(R, R_0, T)$ we calculate the discrete approximation of the curves using a fine enough discretization of $\phi$.
+
+\begin{figure}
+\centering
+\includegraphics{pictures.1}
+\caption{Candle top view. The wick is represented by the black circle. Grey area is the winding wax sheet. Dashed line is the middle surface we track.}
+\label{topview}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics{pictures.2}
+\caption{Candle side view. Dashed line again represents the tracked middle surface.}
+\label{sideview}
+\end{figure} 
+
+\begin{figure}
+\centering
+\includegraphics{pictures.3}
+\caption{Example of a cut template.}
+\label{cuttemplate}
+\end{figure} 
+\end{document}
